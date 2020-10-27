@@ -486,8 +486,19 @@
 		<!--<artifactId>kylin-jdbc</artifactId> -->
 		<!--<version>2.3.0</version> -->
 		<!--</dependency> -->
-		
-	</dependencies>
+        <dependency>
+            <groupId>com.pivotal.greenplum</groupId>
+            <artifactId>greenplum</artifactId>
+            <version>5.18.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.1.4</version>
+        </dependency>
+
+
+    </dependencies>
 
 	<build>
 		<plugins>

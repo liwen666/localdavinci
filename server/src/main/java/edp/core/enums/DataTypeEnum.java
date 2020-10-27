@@ -26,6 +26,10 @@ public enum DataTypeEnum {
 
     MYSQL("mysql", "mysql", "com.mysql.jdbc.Driver", "`", "`", "'", "'"),
 
+    GREENPLUM("pivotal:greenplum", "pivotal:greenplum", "com.pivotal.jdbc.GreenplumDriver", "", "", "'", "'"),
+
+    POSTGRESQL("postgresql", "postgresql", "org.postgresql.Driver", "", "", "'", "'"),
+
     ORACLE("oracle", "oracle", "oracle.jdbc.driver.OracleDriver", "\"", "\"", "\"", "\""),
 
     SQLSERVER("sqlserver", "sqlserver", "com.microsoft.sqlserver.jdbc.SQLServerDriver", "\"", "\"", "\"", "\""),

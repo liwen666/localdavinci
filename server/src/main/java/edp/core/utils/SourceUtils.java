@@ -226,6 +226,9 @@ public class SourceUtils {
         if (matcher.find()) {
             dataSourceName = matcher.group().split(COLON)[1];
         }
+        if("pivotal".equals(dataSourceName)){
+            return DataTypeEnum.GREENPLUM.getFeature();
+        }
         return dataSourceName;
     }
 

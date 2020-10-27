@@ -37,6 +37,8 @@ public class DavinciServerApplication {
 
     public static void main(String[] args) {
         System.setProperty("mail.mime.splitlongparameters", "false");
+        System.out.println("====系统DAVINCI3_HOME环境变量地址是："+System.getenv("DAVINCI3_HOME"));
+        System.setProperty("spring.config.additional-location",System.getenv("DAVINCI3_HOME")+"/config/");
         SpringApplication.run(DavinciServerApplication.class, args);
     }
 
