@@ -384,6 +384,7 @@ public class OrganizationServiceImpl extends BaseEntityService implements Organi
         if (StringUtils.isEmpty(user.getEmail())) {
             throw new ServerException("The email address of the invitee is EMPTY");
         }
+        //TODO 发送邀请信息
         sendInviteEmail(organization, member, user);
 
     }

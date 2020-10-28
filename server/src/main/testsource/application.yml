@@ -1,0 +1,299 @@
+#  <<
+#  Davinci
+#  ==
+#  Copyright (C) 2016 - 2019 EDP
+#  ==
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#        http://www.apache.org/licenses/LICENSE-2.0
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#  >>
+
+davinci:
+  version: 0.3-beta.9
+
+file:
+  userfiles-path: ${DAVINCI3_HOME}/userfiles/
+  web_resources: ${DAVINCI3_HOME}/davinci-ui/
+  phantomJs-path: ${DAVINCI3_HOME}/bin/phantom.js
+  base-path: ${DAVINCI3_HOME}/lib/
+
+
+spring:
+  servlet:
+    multipart:
+      max-request-size: 1024MB
+      max-file-size: 1024MB
+      enabled: true
+
+  config:
+    location: classpath:/
+    additional-location: file:${DAVINCI3_HOME}/config/
+    name: application
+
+  resources:
+    static-locations: classpath:/META-INF/resources/, classpath:/resources/, classpath:/static/, file:${file.userfiles-path}, file:${file.web_resources}
+
+  mvc:
+    static-path-pattern: /**
+
+  thymeleaf:
+    mode: HTML5
+    cache: true
+    prefix: classpath:/templates/
+    encoding: UTF-8
+    suffix: .html
+    check-template-location: true
+    template-resolver-order: 1
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  cache:
+    caffeine:
+      type: caffeine
+
+
+logging:
+  config: file:${DAVINCI3_HOME}/config/logback.xml
+
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path: /api-doc
+
+
+pagehelper:
+  supportMethodsArguments: true
+  reasonable: true
+  returnPageInfo: check
+  helperDialect: mysql
+  params: count=countSql
+
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*Mapper.xml
+  config-locations: classpath:mybatis/mybatis-config.xml
+  type-aliases-package: edp.davinci.model
+  configuration:
+    map-underscore-to-camel-case: true
+    use-generated-keys: true
+
+mapper:
+  identity: MYSQL
+  not-empty: false
+  mappers: edp.davinci.dao
+
+sql_template_delimiter: $
+
+custom-datasource-driver-path: ${DAVINCI3_HOME}/config/datasource_driver.yml
+
+
+
+---
+#  <<
+#  Davinci
+#  ==
+#  Copyright (C) 2016 - 2019 EDP
+#  ==
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#        http://www.apache.org/licenses/LICENSE-2.0
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#  >>
+
+
+server:
+  protocol: http
+  address: 127.0.0.1
+  port: 8080
+
+  servlet:
+    context-path: /
+
+  # Userd for mail and download services, can be empty, careful configuration
+  # By default, 'server.address' and 'server.port' is used as the string value.
+  # access:
+  #  address:
+  #  port:
+
+
+## jwt is one of the important configuration of the application
+## jwt config cannot be null or empty
+jwtToken:
+  secret: secret
+  timeout: 1800000
+  algorithm: HS512
+
+
+## your datasource config
+source:
+  initial-size: 1
+  min-idle: 1
+  max-wait: 30000
+  max-active: 10
+  break-after-acquire-failure: true
+  connection-error-retry-attempts: 1
+  time-between-eviction-runs-millis: 2000
+  min-evictable-idle-time-millis: 600000
+  max-evictable-idle-time-millis: 900000
+  test-while-idle: true
+  test-on-borrow: false
+  test-on-return: false
+  validation-query: select 1
+  validation-query-timeout: 10
+  keep-alive: false
+  filters: stat
+
+  enable-query-log: false
+  result-limit: 1000000
+
+
+spring:
+  mvc:
+    async:
+      request-timeout: 30s
+  rest:
+    proxy-host:
+    proxy-port:
+    proxy-ignore:
+
+
+  ## davinci datasource config
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://192.168.60.136:3306/davinci3_dev?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    initial-size: 1
+    min-idle: 1
+    max-wait: 30000
+    max-active: 10
+    break-after-acquire-failure: true
+    connection-error-retry-attempts: 1
+    time-between-eviction-runs-millis: 2000
+    min-evictable-idle-time-millis: 600000
+    max-evictable-idle-time-millis: 900000
+    test-while-idle: true
+    test-on-borrow: false
+    test-on-return: false
+    validation-query: select 1
+    validation-query-timeout: 10
+    keep-alive: false
+    filters: stat
+
+  ## redis config
+  ## please choose either of the two ways
+  redis:
+    isEnable: false
+
+    ## standalone config
+    host: 127.0.0.1
+    port: 6379
+
+    ## cluster config
+    #  cluster:
+    #       nodes:
+
+    password:
+    database: 0
+    timeout: 1000
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: 1
+        max-idle: 8
+        min-idle: 0
+
+  ## mail is one of the important configuration of the application
+  ## mail config cannot be null or empty
+  ## some mailboxes need to be set separately password for the SMTP service)
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: 1438131288@qq.com
+    fromAddress: 1438131288@qq.com
+    password: orocyfwemhjvgdea
+    nickname:
+
+
+  ldap:
+    urls:
+    username:
+    password:
+    base:
+    domainName:    # domainName 指 企业邮箱后缀，如企业邮箱为：xxx@example.com, 这里值为 '@example.com'
+
+  security:
+    oauth2:
+      enable: false
+#      client:
+#        registration:
+#          cas:
+#            provider: cas
+#            client-id: "xxxxx"
+#            client-name: "Sign in with XXX"
+#            client-secret: "xxxxx"
+#            authorization-grant-type: authorization_code
+#            client-authentication-method: post
+#            redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            scope: userinfo
+#        provider:
+#          cas:
+#            authorization-uri: https://cas.xxxxx.cn/cas/oauth2.0/authorize
+#            token-uri: https://cas.xxxxx.cn/cas/oauth2.0/accessToken
+#            user-info-uri: https://cas.xxxxx.cn/cas/oauth2.0/profile
+#            user-name-attribute: id
+#            userMapping:
+#              email: "attributes.Email"
+#              name: "attributes.CnName1"
+#              avatar: "attributes.Avatar"
+
+screenshot:
+  default_browser: PHANTOMJS                    # PHANTOMJS or CHROME
+  timeout_second: 600
+  phantomjs_path: $your_phantomjs_path$
+  chromedriver_path: $your_chromedriver_path$
+  remote_webdriver_url: $your_remote_webdriver_url$
+
+data-auth-center:
+  channels:
+    - name:
+      base-url:
+      auth-code:
+
+statistic:
+  enable: false
+
+  # You can use external elasticsearch storage [127.0.0.1:9300]
+  elastic_urls:
+  elastic_user:
+  elastic_index_prefix:
+
+  # You can also use external mysql storage
+  mysql_url:
+  mysql_username:
+  mysql_password:
+
+  # You can also use external kafka
+  kafka.bootstrap.servers:
+  kafka.topic:
+  java.security.krb5.conf:
+  java.security.keytab:
+  java.security.principal:
+
+encryption:
+  maxEncryptSize: 1024
+  type: Off # Off is to turn off encryption, to enable encryption, please select AES or RSA
